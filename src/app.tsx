@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react';
 import './app.css';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
+import { useSpeechSynthesis } from './hooks'
 
 const App = () => {
   const { transcript, finalTranscript, resetTranscript, browserSupportsSpeechRecognition } = useSpeechRecognition();
+  const [ voices, speak ] = useSpeechSynthesis();
 
   useEffect(() => {
     if (browserSupportsSpeechRecognition) {
