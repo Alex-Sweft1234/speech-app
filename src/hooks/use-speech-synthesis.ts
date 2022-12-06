@@ -2,18 +2,18 @@ import { useEffect, useRef, useState } from 'react';
 
 export const useSpeechSynthesis = () => {
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
-  const synth = useRef<any>();
+  const synth = useRef<SpeechSynthesis | null>(null);
 
   const updateVoices = () => {
-    setVoices(synth.current.getVoices());
+    if (synth.current) setVoices(synth.current.getVoices());
   };
 
-  const speak = (text = '', voice = voices[15], pitch = 1, rate = 1) => {
+  const speak = (text: string, voice: SpeechSynthesisVoice | null, pitch: number, rate: number) => {
     const utterance: SpeechSynthesisUtterance = new SpeechSynthesisUtterance(text);
     utterance.voice = voice;
     utterance.pitch = pitch;
     utterance.rate = rate;
-    synth.current.speak(utterance);
+    if (synth.current) synth.current.speak(utterance);
   }
 
   useEffect(() => {
@@ -23,7 +23,7 @@ export const useSpeechSynthesis = () => {
     updateVoices();
 
     return () => {
-      synth.current.onvoiceschanged = null
+      if (synth.current) synth.current.onvoiceschanged = null
     }
   }, []);
 
